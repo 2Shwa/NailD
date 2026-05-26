@@ -61,7 +61,7 @@
   left: 50%;
   top: 120%;
   background: var(--color-pink);
-  border-radius: 50% 50% 0 0 / 42% 42% 0 0;
+  border-radius: 60% 60% 0 0 / 40% 40% 0 0;
   transform: translateX(-50%);
   animation: arch-slide 1800ms var(--ease-onboarding) forwards;
 }
@@ -80,13 +80,19 @@
   position: absolute;
   left: 170px;
   top: 363px;
+
   display: flex;
   align-items: center;
+  
+  gap: 5px;
   width: 93px;
   height: 26px;
+
   margin: 0;
   padding: 0;
+
   font-family: "ADLaM Display", "Arial Rounded MT Bold", "Segoe UI", sans-serif;
+
   font-size: 20px;
   font-weight: 400;
   line-height: 26px;
@@ -96,12 +102,10 @@
 }
 
 .tagline span:first-child {
-  width: 37px;
   color: var(--color-text);
 }
 
 .tagline span:last-child {
-  width: 56px;
   color: var(--color-surface);
 }
 

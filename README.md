@@ -1,16 +1,57 @@
-# React + Vite
+# 💅 Nail:D
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+3D 기반 네일 디자인 및 커스텀 네일 시뮬레이션 서비스
 
-Currently, two official plugins are available:
+사용자가 3D 손톱 위에 네일 디자인을 미리 적용해보고,
+직접 꾸미며 자신만의 네일을 제작할 수 있는 웹 서비스입니다.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## ✨ 주요 기능
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 💅 3D 네일팁 위 네일 디자인 적용
+- ❤️ 즐겨찾기 저장
+- 📱 모바일 반응형 UI
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠 사용 기술
+
+### Frontend
+- React
+- Vite
+- CSS
+- Figma
+
+### 예정 기술
+- Three.js
+- React Three Fiber
+
+---
+
+## 🎯 프로젝트 목표
+
+상상만 했던 네일 디자인을 직접 3D 환경에서 구현하며, 재미와 창의성을 함께 경험할 수 있는 웹 서비스를 만드는 것이 목표입니다.
+
+Nail:D는 사용자가 자신의 아이디어를 단순히 상상으로 끝내지 않고, 3D 손톱 위에 적용된 모습을 직관적으로 확인하며 자유롭게 디자인할 수 있도록 제작하고 있습니다.
+
+또한 완성한 디자인을 기반으로 네일샵 방문 시 원하는 스타일을 쉽게 전달하거나, 직접 보며 셀프 네일에도 활용할 수 있는 실용적인 서비스가 되는 것을 목표로 합니다.
+
+---
+
+## 👩‍💻 담당 역할
+
+- UI / UX 설계
+- Figma 디자인
+- React 화면 구현
+- CSS 스타일링
+- 사용자 인터랙션 설계
+
+---
+
+## 🚀 실행 방법
+
+```bash
+npm install
+npm run dev
+```
