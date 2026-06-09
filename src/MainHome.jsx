@@ -30,7 +30,9 @@ function Header() {
               </button>
             ))}
           </nav>
-          <button className="mh-profile-button" type="button" aria-label="마이페이지" />
+          <button className="mh-profile-button" type="button" aria-label="마이페이지">
+            <img src={ASSETS.userIcon} alt="" aria-hidden="true" />
+          </button>
         </div>
       </div>
     </header>
