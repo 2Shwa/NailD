@@ -1,6 +1,7 @@
 export const ASSETS = {
   hand: '/hand_imag.png',
-  logo: '/logo_text.png',
+  textlogo: '/logo_text.png',
+  pinktextlogo: '/logo_text_pink.png',
   nailIcon: '/nail_icon.png',
   rightArrowIcon: '/icon/RightArrowIcon.svg',
 }

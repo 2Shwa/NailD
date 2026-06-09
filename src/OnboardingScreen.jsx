@@ -7,7 +7,7 @@ function OnboardingScreen() {
 
       <div className="brand-stage">
         <img className="nail-icon" src={ASSETS.nailIcon} alt="" />
-        <img className="logo-mark" src={ASSETS.logo} alt="Nail:D" />
+        <img className="logo-mark" src={ASSETS.textlogo} alt="Nail:D" />
         <p className="tagline" aria-label="Nail design">
           <span>네일</span>
           <span>디자인</span>
