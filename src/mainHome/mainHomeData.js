@@ -28,8 +28,32 @@ export const communityPosts = Array.from({ length: 18 }, (_, index) => ({
 }))
 
 export const footerColumns = [
-  { title: 'Design', links: ['네일 디자인하기', '나의 디자인'] },
-  { title: 'Gallery', links: ['디자인 구경하기', '저장한 디자인'] },
-  { title: 'Community', links: ['게시글 구경하기', '나의 게시글'] },
-  { title: 'Support', links: ['문의하기', '버그 제보'] },
+  {
+    title: 'Design',
+    links: [
+      { label: '네일 디자인하기', page: 'Design' },
+      { label: '나의 디자인', page: 'MyDesign' },
+    ],
+  },
+  {
+    title: 'Gallery',
+    links: [
+      { label: '디자인 구경하기', page: 'Gallery' },
+      { label: '저장한 디자인', page: 'SavedDesign' },
+    ],
+  },
+  {
+    title: 'Community',
+    links: [
+      { label: '게시글 구경하기', page: 'Community' },
+      { label: '나의 게시글', page: 'MyPosts' },
+    ],
+  },
+  {
+    title: 'Support',
+    links: [
+      { label: '문의하기', page: 'Contact' },
+      { label: '버그 제보', page: 'BugReport' },
+    ],
+  },
 ]
