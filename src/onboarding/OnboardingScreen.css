@@ -1,0 +1,129 @@
+.screen {
+  position: relative;
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.onboarding-screen {
+  --logo-width: 150px;
+  --logo-height: 50px;
+  isolation: isolate;
+}
+
+.brand-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--design-width);
+  height: var(--design-height);
+  transform: translate(-50%, -50%) scale(var(--stage-scale));
+  transform-origin: center;
+}
+
+.nail-icon {
+  position: absolute;
+  z-index: 1;
+  width: clamp(120px, 10.417vw, 200px);
+  height: clamp(120px, 10.417vw, 200px);
+  left: 50%;
+  top: 133.056%;
+  object-fit: contain;
+  transform: translateX(-50%) rotate(-180deg);
+  animation: icon-slide 1800ms var(--ease-onboarding) forwards;
+}
+
+.pink-arch {
+  position: absolute;
+  width: max(130.208vw, 231.481svh);
+  height: 151.605svh;
+  left: 50%;
+  top: 151.543%;
+  background: var(--color-pink);
+  border-radius: 99999px 99999px 0 0;
+  transform: translateX(-50%);
+  animation: arch-slide 1800ms var(--ease-onboarding) forwards;
+}
+
+.logo-mark {
+  position: absolute;
+  width: var(--logo-width);
+  height: var(--logo-height);
+  left: calc(50% - var(--logo-width) / 2 + 25px);
+  top: calc(50% - var(--logo-height) / 2);
+  object-fit: contain;
+  animation: logo-settle 800ms var(--ease-onboarding) 600ms forwards;
+}
+
+@media (min-width: 1200px) {
+  .onboarding-screen {
+    --logo-width: 210px;
+    --logo-height: 70px;
+  }
+
+  .nail-icon {
+    width: 240px;
+    height: 240px;
+  }
+}
+
+.tagline {
+  position: absolute;
+  left: 170px;
+  top: 363px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 93px;
+  height: 26px;
+  margin: 0;
+  padding: 0;
+  font-family: "ADLaM Display", "Arial Rounded MT Bold", "Segoe UI", sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 26px;
+  letter-spacing: 0;
+  white-space: nowrap;
+  animation: tagline-settle 800ms var(--ease-onboarding) 600ms forwards;
+}
+
+.tagline span:first-child {
+  color: var(--color-text);
+}
+
+.tagline span:last-child {
+  color: var(--color-surface);
+}
+
+@keyframes icon-slide {
+  to {
+    top: -70.093%;
+  }
+}
+
+@keyframes arch-slide {
+  to {
+    top: -51.605%;
+  }
+}
+
+@keyframes logo-settle {
+  from {
+    left: calc(50% - var(--logo-width) / 2 + 25px);
+  }
+
+  to {
+    left: calc(50% - var(--logo-width) / 2);
+  }
+}
+
+@keyframes tagline-settle {
+  from {
+    left: 170px;
+  }
+
+  to {
+    left: 149px;
+  }
+}

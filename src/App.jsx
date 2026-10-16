@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import { ONBOARDING_DURATION_MS } from './appConfig'
-import MainHome from './MainHome'
-import OnboardingScreen from './OnboardingScreen'
+import MainHome from './mainHome/MainHome'
+import OnboardingScreen from './onboarding/OnboardingScreen'
 import './App.css'
 
 function App() {
@@ -10,7 +9,7 @@ function App() {
   useEffect(() => {
     const timer = window.setTimeout(() => {
       setShowOnboarding(false)
-    }, ONBOARDING_DURATION_MS)
+    }, 2000)
 
     return () => window.clearTimeout(timer)
   }, [])
