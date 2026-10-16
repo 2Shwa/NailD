@@ -17,6 +17,12 @@ export const designCards = [
   { name: '블러썸 페탈', author: '작성자 아이디', likes: '1.5k', pattern: 'petal' },
   { name: '리본 글로우', author: '작성자 아이디', likes: '1.5k', pattern: 'ribbon' },
   { name: '펄 드롭', author: '작성자 아이디', likes: '1.5k', pattern: 'pearl' },
+  { name: '로즈 체커', author: '작성자 아이디', likes: '1.2k', pattern: 'checker' },
+  { name: '피치 블러썸', author: '작성자 아이디', likes: '980', pattern: 'petal' },
+  { name: '새틴 리본', author: '작성자 아이디', likes: '870', pattern: 'ribbon' },
+  { name: '밀키 펄', author: '작성자 아이디', likes: '760', pattern: 'pearl' },
+  { name: '베리 체커', author: '작성자 아이디', likes: '650', pattern: 'checker' },
+  { name: '스프링 페탈', author: '작성자 아이디', likes: '540', pattern: 'petal' },
 ]
 
 export const communityPosts = Array.from({ length: 18 }, (_, index) => ({

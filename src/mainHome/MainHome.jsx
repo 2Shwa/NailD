@@ -4,6 +4,7 @@ import Header from './components/Header'
 import Hero from './components/Hero'
 import HotCommunity from './components/HotCommunity'
 import HotDesign from './components/HotDesign'
+import useHomeSectionScroll from './useHomeSectionScroll'
 import './MainHome.css'
 
 function scrollToPosition(targetY, duration = 1000) {
@@ -71,6 +72,8 @@ function FooterPage({ title, description }) {
 
 function MainHome() {
   const [activePage, setActivePage] = useState('Home')
+  const pageRef = useRef(null)
+  useHomeSectionScroll(pageRef, activePage === 'Home')
   const scrollTimerRef = useRef(null)
   const footerPage = footerPages[activePage]
   const myPageRoutes = ['MyPage', 'MyDesign', 'SavedDesign', 'MyPosts']
@@ -117,7 +120,7 @@ function MainHome() {
   }
 
   return (
-    <main className="mh-page">
+    <main className="mh-page" ref={pageRef}>
       <Header activePage={activePage} onNavigate={handleNavigate} />
       <div className="mh-main-container">
         {activePage === 'Home' && (
@@ -125,7 +128,7 @@ function MainHome() {
             <Hero onNavigate={handleNavigate} />
             <div className="mh-section-frame">
               <HotDesign />
-              <HotCommunity />
+              <HotCommunity onBrowse={() => handleNavigate('Community')} />
             </div>
           </>
         )}
