@@ -4,6 +4,7 @@ import Header from './components/Header'
 import Hero from './components/Hero'
 import HotCommunity from './components/HotCommunity'
 import HotDesign from './components/HotDesign'
+import GalleryDesigns from './components/GalleryDesigns'
 import { animateScroll } from './animateScroll'
 import { getCurrentPage, navigateToPage, subscribeToPageChange } from './pageRouting'
 import './MainHome.css'
@@ -28,6 +29,7 @@ function GalleryPage() {
   return (
     <section className="mh-page-section">
       <HotDesign />
+      <GalleryDesigns />
     </section>
   )
 }
