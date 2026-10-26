@@ -2,26 +2,43 @@ import { useEffect, useRef, useState } from 'react'
 import { ASSETS } from '../../appConfig'
 import { designCards } from '../mainHomeData'
 import DesignCard from './DesignCard'
-import { animateScroll } from '../animateScroll'
+import { createCarouselScroller } from '../createCarouselScroller'
 
-function HotDesign({ title = 'Hot Design', actionLabel = '더 많은 디자인 구경하기' }) {
+function HotDesign({ title = 'Hot Design', actionLabel = '더 많은 디자인 구경하기', onBrowse }) {
   const listRef = useRef(null)
-  const animationRef = useRef(null)
+  const scrollerRef = useRef(null)
   const [edges, setEdges] = useState({ start: true, end: false })
 
   useEffect(() => {
     const list = listRef.current
-    const updateEdges = () => setEdges({
-      start: list.scrollLeft <= 1,
-      end: list.scrollLeft + list.clientWidth >= list.scrollWidth - 1,
-    })
-    const observer = new ResizeObserver(updateEdges)
+    const getEnd = () => {
+      const endPadding = parseFloat(getComputedStyle(list).paddingRight) || 0
+      return Math.max(0, list.scrollWidth - list.clientWidth - endPadding)
+    }
+    const updateEdges = () => {
+      const position = scrollerRef.current?.getTarget() ?? list.scrollLeft
+      setEdges({ start: position <= 1, end: position >= getEnd() - 1 })
+    }
+    const scroller = createCarouselScroller(list, updateEdges, getEnd)
+    scrollerRef.current = scroller
+    const observer = new ResizeObserver(() => scroller.cancel())
     observer.observe(list)
     list.addEventListener('scroll', updateEdges, { passive: true })
+    const cancel = () => scroller.cancel()
+    const handleKeyDown = (event) => {
+      if (['ArrowLeft', 'ArrowRight', 'Home', 'End', 'PageUp', 'PageDown'].includes(event.key)) cancel()
+    }
+    list.addEventListener('pointerdown', cancel)
+    list.addEventListener('wheel', cancel, { passive: true })
+    list.addEventListener('keydown', handleKeyDown)
     return () => {
-      animationRef.current?.()
       observer.disconnect()
       list.removeEventListener('scroll', updateEdges)
+      list.removeEventListener('pointerdown', cancel)
+      list.removeEventListener('wheel', cancel)
+      list.removeEventListener('keydown', handleKeyDown)
+      scrollerRef.current = null
+      scroller.cancel()
     }
   }, [])
 
@@ -30,13 +47,7 @@ function HotDesign({ title = 'Hot Design', actionLabel = '더 많은 디자인 �
     const card = list.firstElementChild
     const step = card.getBoundingClientRect().width + parseFloat(getComputedStyle(list).columnGap)
     const count = Math.max(1, Math.floor(list.clientWidth / step))
-    animationRef.current?.()
-    const start = list.scrollLeft
-    const target = Math.max(0, Math.min(list.scrollWidth - list.clientWidth,
-      (Math.round(start / step) + direction * count) * step))
-    animationRef.current = animateScroll(list, { left: target }, () => {
-      animationRef.current = null
-    })
+    scrollerRef.current?.move(direction, step, count)
   }
 
   return (
@@ -57,11 +68,13 @@ function HotDesign({ title = 'Hot Design', actionLabel = '더 많은 디자인 �
           <span className="mh-carousel-arrow-icon" style={{ '--arrow-url': `url(${ASSETS.rightArrowIcon})` }} aria-hidden="true" />
         </button>
       </div>
-      <div className="mh-design-actions">
-        <button className="mh-outline-button" type="button">
-          {actionLabel}
-        </button>
-      </div>
+      {onBrowse && (
+        <div className="mh-design-actions">
+          <button className="mh-outline-button" type="button" onClick={onBrowse}>
+            {actionLabel}
+          </button>
+        </div>
+      )}
     </section>
   )
 }

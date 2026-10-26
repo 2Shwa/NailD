@@ -1,29 +1,27 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useSyncExternalStore } from 'react'
 import Footer from './components/Footer'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import HotCommunity from './components/HotCommunity'
 import HotDesign from './components/HotDesign'
-import useHomeSectionScroll from './useHomeSectionScroll'
+import { animateScroll } from './animateScroll'
+import { getCurrentPage, navigateToPage, subscribeToPageChange } from './pageRouting'
 import './MainHome.css'
 
-function scrollToPosition(targetY, duration = 1000) {
-  const startY = window.scrollY
-  const distance = targetY - startY
-  const startTime = performance.now()
+const MY_PAGE_TARGETS = {
+  MyDesign: 'my-design',
+  SavedDesign: 'saved-design',
+  MyPosts: 'my-posts',
+}
+const MY_PAGE_ROUTES = ['MyPage', ...Object.keys(MY_PAGE_TARGETS)]
 
-  const animate = (currentTime) => {
-    const progress = Math.min((currentTime - startTime) / duration, 1)
-    const easedProgress = 1 - Math.pow(1 - progress, 3)
-
-    window.scrollTo(0, startY + distance * easedProgress)
-
-    if (progress < 1) {
-      window.requestAnimationFrame(animate)
-    }
-  }
-
-  window.requestAnimationFrame(animate)
+function cancelPendingScroll(pending) {
+  window.clearTimeout(pending.timer)
+  window.cancelAnimationFrame(pending.frame)
+  pending.cancelAnimation?.()
+  pending.timer = null
+  pending.frame = null
+  pending.cancelAnimation = null
 }
 
 function GalleryPage() {
@@ -34,7 +32,7 @@ function GalleryPage() {
   )
 }
 
-function MyPage() {
+function MyPage({ onBrowse, onCreateDesign }) {
   return (
     <section className="mh-page-section">
       <div className="mh-section-title">
@@ -42,10 +40,10 @@ function MyPage() {
       </div>
       <p className="mh-page-copy">마이페이지 입니다.</p>
       <div id="my-design" className="mh-my-page-anchor">
-        <HotDesign title="My Designs" actionLabel="새 디자인 만들기" />
+        <HotDesign onBrowse={onCreateDesign} title="My Designs" actionLabel="새 디자인 만들기" />
       </div>
       <div id="saved-design" className="mh-my-page-anchor">
-        <HotDesign title="Saved Designs" actionLabel="더 많은 디자인 구경하기" />
+        <HotDesign onBrowse={onBrowse} title="Saved Designs" actionLabel="더 많은 디자인 구경하기" />
       </div>
       <div id="my-posts" className="mh-my-page-anchor">
         <HotCommunity title="My Posts" />
@@ -71,63 +69,68 @@ function FooterPage({ title, description }) {
 }
 
 function MainHome() {
-  const [activePage, setActivePage] = useState('Home')
-  const pageRef = useRef(null)
-  useHomeSectionScroll(pageRef, activePage === 'Home')
-  const scrollTimerRef = useRef(null)
+  const activePage = useSyncExternalStore(subscribeToPageChange, getCurrentPage)
+  const previousPageRef = useRef(null)
+  const handleNavigate = navigateToPage
+  const pendingScrollRef = useRef({ timer: null, frame: null, cancelAnimation: null })
   const footerPage = footerPages[activePage]
-  const myPageRoutes = ['MyPage', 'MyDesign', 'SavedDesign', 'MyPosts']
 
-  const handleNavigate = (page) => {
-    if (scrollTimerRef.current !== null) {
-      window.clearTimeout(scrollTimerRef.current)
-      scrollTimerRef.current = null
-    }
+  useEffect(() => {
+    const pending = pendingScrollRef.current
+    return () => cancelPendingScroll(pending)
+  }, [])
 
-    const targetIds = {
-      MyDesign: 'my-design',
-      SavedDesign: 'saved-design',
-      MyPosts: 'my-posts',
-    }
-    const targetId = targetIds[page]
-    const isCurrentlyMyPage = myPageRoutes.includes(activePage)
+  useEffect(() => {
+    const page = activePage
+    const pending = pendingScrollRef.current
+    cancelPendingScroll(pending)
+    const targetId = MY_PAGE_TARGETS[page]
+    const isCurrentlyMyPage = MY_PAGE_ROUTES.includes(previousPageRef.current)
+    previousPageRef.current = page
 
     if (!targetId || !isCurrentlyMyPage) {
       window.scrollTo({ top: 0, behavior: 'auto' })
     }
 
-    setActivePage(page)
-
     if (!targetId) {
       return
     }
 
-    const moveToTarget = () => window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        const target = document.getElementById(targetId)
-        if (!target) return
+    const moveToTarget = () => {
+      pending.timer = null
+      pending.frame = window.requestAnimationFrame(() => {
+        pending.frame = window.requestAnimationFrame(() => {
+          pending.frame = null
+          const target = document.getElementById(targetId)
+          if (!target) return
 
-        const targetY = target.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.35
-        scrollToPosition(targetY)
+          const targetY = target.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.35
+          const root = document.scrollingElement
+          if (!root) return
+          pending.cancelAnimation = animateScroll(root, { top: Math.max(0, targetY) }, () => {
+            pending.cancelAnimation = null
+          })
+        })
       })
-    })
+    }
 
     if (isCurrentlyMyPage) {
       moveToTarget()
     } else {
-      scrollTimerRef.current = window.setTimeout(moveToTarget, 500)
+      pending.timer = window.setTimeout(moveToTarget, 500)
     }
-  }
+    return () => cancelPendingScroll(pending)
+  }, [activePage])
 
   return (
-    <main className="mh-page" ref={pageRef}>
+    <main className="mh-page">
       <Header activePage={activePage} onNavigate={handleNavigate} />
       <div className="mh-main-container">
         {activePage === 'Home' && (
           <>
             <Hero onNavigate={handleNavigate} />
-            <div className="mh-section-frame">
-              <HotDesign />
+            <div className="mh-section-frame mh-home-sections">
+              <HotDesign onBrowse={() => handleNavigate('Gallery')} />
               <HotCommunity onBrowse={() => handleNavigate('Community')} />
             </div>
           </>
@@ -149,9 +152,12 @@ function MainHome() {
           </div>
         )}
 
-        {myPageRoutes.includes(activePage) && (
+        {MY_PAGE_ROUTES.includes(activePage) && (
           <div className="mh-section-frame">
-            <MyPage />
+            <MyPage
+              onBrowse={() => handleNavigate('Gallery')}
+              onCreateDesign={() => handleNavigate('Design')}
+            />
           </div>
         )}
 

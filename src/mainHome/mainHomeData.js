@@ -4,7 +4,8 @@ export const heroContent = {
   titleLines: ['나만의 네일 디자인', '상상하는 그대로'],
   descriptionLines: [
     '디자인부터 공유, 소통까지 한 곳에서',
-    '나만의 네일을 디자인하고 다양한 작품을 자유롭게 탐색해보세요.',
+    '나만의 네일을 디자인하고 ',
+    '다양한 작품을 자유롭게 탐색해보세요.'
   ],
   actions: [
     { label: '디자인하러 가기', variant: 'primary' },
